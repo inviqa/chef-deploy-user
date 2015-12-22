@@ -19,3 +19,9 @@ end
 user node['deploy_user']['user'] do
    action :lock
 end
+
+sudo 'deploy_permissions' do
+  group node['deploy_user']['user']
+  runas node['deploy_user']['group']
+  nopasswd true
+end

@@ -21,3 +21,7 @@ end
 describe user('deploy') do
   it { should have_login_shell '/sbin/nologin' }
 end
+
+describe file('/etc/deploy/.ssh/known_hosts') do
+  it { should be_file }
+end
