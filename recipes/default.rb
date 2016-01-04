@@ -37,9 +37,12 @@ file ssh_known_hosts_path do
   action  :create
 end
 
-node['deploy_user']['ssh_known_hosts'].each do | known_host |
-  ssh_known_hosts_entry known_host do
+node['deploy_user']['ssh_known_hosts_entries'].each do | known_host_entry |
+  ssh_known_hosts_entry known_host_entry do
     path ssh_known_hosts_path
+    key_type known_host_entry[:key_type]
+    host known_host_entry[:host]
+    key known_host_entry[:key]
   end
 end
 
