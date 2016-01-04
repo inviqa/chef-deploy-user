@@ -39,9 +39,10 @@ end
 Chef::Log.debug 'Loop through the specified data bag and create the SSH private keys'
 data_bag(known_hosts_data_bag).each do |bag_item_id|
   bag_item = Chef::EncryptedDataBagItem.load(known_hosts_data_bag, bag_item_id)
-  bag_item[:private_keys].each do |private_key|
-    file private_key[:path] do
-      content private_key[:content]
+  Chef::Log.debug bag_item
+  bag_item['private_keys'].each do |private_key|
+    file "#{ssh_dir_path}/#{private_key['filename']}" do
+      content private_key['content']
       owner   node['deploy_user']['user']
       group   node['deploy_user']['gid']
       mode    '0400'
