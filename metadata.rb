@@ -1,10 +1,10 @@
 name 'deploy-user'
-maintainer 'The Authors'
-maintainer_email 'bhanlon@sessiondigital.com'
+maintainer 'Barney Hanlon & Walter Dolce'
+maintainer_email 'bhanlon@sessiondigital.com, wdolce@sessiondigital.com'
 license 'all_rights'
 description 'Installs/Configures deploy-user'
 long_description 'Installs/Configures deploy-user'
-version '0.1.0'
+version '0.9.0'
 
 depends 'ssh_known_hosts'
 depends 'sudo'
