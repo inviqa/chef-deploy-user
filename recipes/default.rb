@@ -42,10 +42,11 @@ data_bag(known_hosts_data_bag).each do |bag_item_id|
   Chef::Log.debug bag_item
   bag_item['private_keys'].each do |private_key|
     file "#{ssh_dir_path}/#{private_key['filename']}" do
-      content private_key['content']
-      owner   node['deploy_user']['user']
-      group   node['deploy_user']['gid']
-      mode    '0400'
+      content   private_key['content']
+      owner     node['deploy_user']['user']
+      group     node['deploy_user']['gid']
+      mode      '0400'
+      sensitive true
     end
   end
 end if node['deploy_user']['data_bag']

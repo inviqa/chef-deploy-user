@@ -4,7 +4,6 @@ Feature: Add github to known hosts file
   I need to ensure github is a known host
 
 Scenario: github is added to user known hosts
-  Given I have provisioned the server
-  And the deploy user is "deploy"
-  When I checkout a repository
+  Given the deploy user is "deploy"
+  When I checkout my private repository
   Then I am not asked to verify the host
