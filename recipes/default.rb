@@ -16,11 +16,11 @@ end
 
 Chef::Log.debug  'Create the deploy user.'
 user node['deploy_user']['user'] do
-   gid node['deploy_user']['gid']
-   shell node['deploy_user']['shell'] if node['deploy_user']['shell']
-   home node['deploy_user']['home'] if node['deploy_user']['home']
-   manage_home node['deploy_user']['manage_home']
-   action :create
+   gid          node['deploy_user']['gid']
+   shell        node['deploy_user']['shell'] if node['deploy_user']['shell']
+   home         node['deploy_user']['home'] if node['deploy_user']['home']
+   manage_home  node['deploy_user']['manage_home']
+   action       :create
 end
 
 Chef::Log.debug 'Lock the user so it cannot be directly logged into.'
@@ -37,10 +37,10 @@ directory ssh_dir_path do
 end
 
 Chef::Log.debug 'Loop through the specified data bag and create the SSH private keys'
-data_bag(known_hosts_data_bag).each do |bag_item_id|
+data_bag(known_hosts_data_bag).each do | bag_item_id |
   bag_item = Chef::EncryptedDataBagItem.load(known_hosts_data_bag, bag_item_id)
   Chef::Log.debug bag_item
-  bag_item['private_keys'].each do |private_key|
+  bag_item['private_keys'].each do | private_key |
     file "#{ssh_dir_path}/#{private_key['filename']}" do
       content   private_key['content']
       owner     node['deploy_user']['user']

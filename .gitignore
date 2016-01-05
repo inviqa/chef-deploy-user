@@ -14,3 +14,4 @@ bin/*
 
 .kitchen/
 .kitchen.local.yml
+test/integration/*/encrypted_data_bag_secret
