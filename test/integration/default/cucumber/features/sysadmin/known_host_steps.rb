@@ -4,7 +4,7 @@ Given(/^the deploy user is "([^"]*)"$/) do |arg1|
   # Placeholder step
 end
 
-When(/^I checkout a repository$/) do
+When(/^I checkout my private repository$/) do
   git_clone = `git clone git@github.com:inviqa/chef-deploy-user.git`
 end
 
