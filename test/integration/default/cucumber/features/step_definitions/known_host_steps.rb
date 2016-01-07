@@ -15,3 +15,12 @@ end
 Then(/^I am not asked to verify the host$/) do
   ::STDOUT.puts @git_clone
 end
+
+When (/^I run sudo$/) do
+  @sudo_command = `sudo -u deploy sudo mkdir -p /var/www/test`
+end
+
+Then(/^the incident is not reported$/) do
+  dir = ::File.directory?('/var/www/test')
+  #expect(dir).to be_truthy
+end

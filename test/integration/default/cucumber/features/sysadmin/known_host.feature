@@ -8,3 +8,8 @@ Scenario: github is added to user known hosts
   And git is installed on the server
   When I checkout my private repository
   Then I am not asked to verify the host
+
+Scenario: deploy user has sudo
+  Given the deploy user is "deploy"
+  When I run sudo
+  Then the incident is not reported

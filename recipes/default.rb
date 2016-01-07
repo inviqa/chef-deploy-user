@@ -71,7 +71,7 @@ end
 
 Chef::Log.debug 'Allow the deploy user to have sudo.'
 sudo 'deploy_permissions' do
-  group node['deploy_user']['user']
-  runas node['deploy_user']['group']
+  user node['deploy_user']['user']
+  defaults ['!requiretty']
   nopasswd true
 end
