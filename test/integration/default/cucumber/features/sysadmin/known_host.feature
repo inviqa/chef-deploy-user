@@ -5,5 +5,6 @@ Feature: Add github to known hosts file
 
 Scenario: github is added to user known hosts
   Given the deploy user is "deploy"
+  And git is installed on the server
   When I checkout my private repository
   Then I am not asked to verify the host
