@@ -31,13 +31,16 @@ describe 'deploy-user::default' do
     end
 
     it 'creates deploy_permissions with sudo' do
-      #expect(chef_run).to create_file('/etc/sudoers.d/deploy_permissions')
-      #expect(chef_run).to render_file('/etc/sudoers.d/deploy_permissions').with_content('%deploy(/s+)!requiretty')
+      # sudoers = '/etc/sudoers.d/deploy_permissions'
+      # reqtty = '%deploy(/s+)!requiretty'
+      # expect(chef_run).to create_file(sudoers)
+      # expect(chef_run).to render_file(sudoers).with_content(reqtty)
     end
 
     it 'should set up the known hosts file' do
-      expect(chef_run).to create_directory('/etc/deploy/.ssh')
-      expect(chef_run).to create_file('/etc/deploy/.ssh/known_hosts')
+      ssh_dir = '/etc/deploy/.ssh'
+      expect(chef_run).to create_directory(ssh_dir)
+      expect(chef_run).to create_file("#{ssh_dir}/known_hosts")
     end
   end
 end

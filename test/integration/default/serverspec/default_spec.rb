@@ -23,17 +23,28 @@ describe user('deploy') do
 end
 
 describe file('/etc/deploy/.ssh/id_rsa') do
+  sha256 = '293674fde6378bb22ce090ff9a901592ec0fc79a8c4fae790a204d3b80bea332'
   it { should be_file }
   it { should be_owned_by 'deploy' }
-  its(:sha256sum) { should eq '293674fde6378bb22ce090ff9a901592ec0fc79a8c4fae790a204d3b80bea332' }
+  its(:sha256sum) { should eq sha256 }
 end
 
 describe file('/etc/deploy/.ssh/known_hosts') do
   it { should be_file }
-  its(:content) { should match 'github.com,192.30.252.128,192.30.252.129,192.30.252.130,192.30.252.131 ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7hRGmdnm9tUDbO9IDSwBK6TbQa+PXYPCPy6rbTrTtw7PHkccKrpp0yVhp5HdEIcKr6pLlVDBfOLX9QUsyCOV0wzfjIJNlGEYsdlLJizHhbn2mUjvSAHQqZETYP81eFzLQNnPHt4EVVUh7VfDESU84KezmD5QlWpXLmvU31/yMf+Se8xhHTvKSCZIFImWwoG6mbUoWf9nzpIoaSjB+weqqUUmpaaasXVal72J+UX2B+2RPW3RcT0eOzQgqlJL3RKrTJvdsjE3JEAvGq3lGHSZXy28G3skua2SmVi/w4yCE6gbODqnTWlg7+wC604ydGXA8VJiS5ap43JXiUFFAaQ==' }
+  hosts = [
+    'github.com',
+    '192.30.252.128',
+    '192.30.252.129',
+    '192.30.252.130',
+    '192.30.252.131'
+  ]
+  key_type = 'ssh-rsa'
+  key = 'AAAAB3NzaC1yc2EAAAABIwAAAQEAq2A7h'
+  entry = "#{hosts.join(',')} #{key_type} #{key}"
+  its(:content) { should match entry }
 end
 
 describe file('/etc/sudoers.d/deploy_permissions') do
   it { should be_file }
-  its(:content) { should match /deploy ALL=\(ALL\)/ }
+  its(:content) { should match(/deploy ALL=\(ALL\)/) }
 end
