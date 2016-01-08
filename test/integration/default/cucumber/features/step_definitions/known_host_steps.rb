@@ -22,5 +22,5 @@ end
 
 Then(/^the incident is not reported$/) do
   dir = ::File.directory?('/var/www/test')
-  #expect(dir).to be_truthy
+  expect(dir).to be_truthy
 end
