@@ -7,5 +7,5 @@ group :integration do
 end
 
 cookbook 'ssh_known_hosts',
-         git:  'git@github.com:shrikeh/chef-ssh-known-hosts.git',
-         ref:  '0.1.0'
+         git:  'git@github.com:kierenevans/chef-ssh-known-hosts.git',
+         ref:  'release/0.2.0'
