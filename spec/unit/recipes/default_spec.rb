@@ -75,6 +75,8 @@ describe 'deploy-user::default' do
   end
 
   context 'with ssh hosts entries' do
+    deploy_known_hosts_path = '/etc/deploy/.ssh/known_hosts'
+
     rsa_key = {
       key_type: 'rsa',
       host: 'example.com',
@@ -99,7 +101,7 @@ describe 'deploy-user::default' do
 
     it 'should create a ssh known hosts entry' do
       expect(chef_run).to create_ssh_known_hosts_entry('example.com').with(
-        path: '/etc/deploy/.ssh/known_hosts',
+        path: deploy_known_hosts_path,
         key_type: rsa_key[:key_type],
         key: rsa_key[:key]
       )
@@ -107,7 +109,7 @@ describe 'deploy-user::default' do
 
     it 'should create a second ssh known hosts entry' do
       expect(chef_run).to create_ssh_known_hosts_entry('example.net').with(
-        path: '/etc/deploy/.ssh/known_hosts',
+        path: deploy_known_hosts_path,
         key_type: dsa_key[:key_type],
         key: dsa_key[:key]
       )
