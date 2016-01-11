@@ -6,5 +6,5 @@ description 'Installs/Configures deploy-user'
 long_description 'Installs/Configures deploy-user'
 version '0.9.0'
 
-depends 'ssh_known_hosts', '0.1.0'
+depends 'ssh_known_hosts', '~> 0.1'
 depends 'sudo'
