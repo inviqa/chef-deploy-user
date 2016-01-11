@@ -49,7 +49,7 @@
 
     <target name="rspec" description="Run rspec for a given directory and generate junit output">
         <echo message="Running rspec for directory '${basedir}'" />
-        <exec executable="chef" dir="${basedir}" failonerror="true" taskname="rspec">
+        <exec executable="bundle" dir="${basedir}" failonerror="true" taskname="rspec">
             <arg value="exec" />
             <arg value="rspec" />
             <arg value="--color" />
