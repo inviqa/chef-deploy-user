@@ -5,7 +5,6 @@
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 
-known_hosts_data_bag  = node['deploy_user']['data_bag']
 ssh_dir_path          = "#{node['deploy_user']['home']}/.ssh"
 ssh_known_hosts_path  = "#{ssh_dir_path}/known_hosts"
 
@@ -36,20 +35,27 @@ directory ssh_dir_path do
   action :create
 end
 
+deploy_keys = node['deploy_user']['private_keys'] || []
+
 Chef::Log.debug 'Loop through a data bag and create the SSH private keys'
+
+known_hosts_data_bag  = node['deploy_user']['data_bag']
+
 data_bag(known_hosts_data_bag).each do |bag_item_id|
   bag_item = Chef::EncryptedDataBagItem.load(known_hosts_data_bag, bag_item_id)
   Chef::Log.debug bag_item
-  bag_item['private_keys'].each do |private_key|
-    file "#{ssh_dir_path}/#{private_key['filename']}" do
-      content private_key['content']
-      owner node['deploy_user']['user']
-      group node['deploy_user']['gid']
-      mode '0400'
-      sensitive true
-    end
-  end
+  deploy_keys += bag_item['private_keys']
 end if node['deploy_user']['data_bag']
+
+deploy_keys.each do |private_key|
+  file "#{ssh_dir_path}/#{private_key['filename']}" do
+    content private_key['content']
+    owner node['deploy_user']['user']
+    group node['deploy_user']['gid']
+    mode '0400'
+    sensitive true
+  end
+end
 
 Chef::Log.debug 'Create the known hosts file for the deploy user'
 file ssh_known_hosts_path do
