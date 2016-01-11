@@ -133,7 +133,8 @@ describe 'deploy-user::default' do
     end
 
     it 'should create the private ssh key' do
-      expect(chef_run).to create_file("#{deploy_ssh_dir}/#{private_key[:filename]}")
+      key_path = "#{deploy_ssh_dir}/#{private_key[:filename]}"
+      expect(chef_run).to create_file(key_path)
     end
   end
 end
