@@ -7,6 +7,9 @@
 require 'spec_helper'
 
 describe 'deploy-user::default' do
+  deploy_home_dir = '/etc/deploy'
+  deploy_ssh_dir = "#{deploy_home_dir}/.ssh"
+
   context 'When all attributes are default, on an unspecified platform' do
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new
@@ -24,7 +27,7 @@ describe 'deploy-user::default' do
     it 'should create the deploy user' do
       expect(chef_run).to create_user('deploy').with(
         gid: 3000,
-        home: '/etc/deploy',
+        home: deploy_home_dir,
         shell: '/sbin/nologin',
         manage_home: true
       )
@@ -43,13 +46,12 @@ describe 'deploy-user::default' do
     end
 
     it 'should set up the known hosts file' do
-      ssh_dir = '/etc/deploy/.ssh'
-      expect(chef_run).to create_directory(ssh_dir).with(
+      expect(chef_run).to create_directory(deploy_ssh_dir).with(
         owner: 'deploy',
         group: 3000,
         mode: '0700'
       )
-      expect(chef_run).to create_file("#{ssh_dir}/known_hosts").with(
+      expect(chef_run).to create_file("#{deploy_ssh_dir}/known_hosts").with(
         owner: 'deploy',
         group: 3000,
         mode: '0644'
@@ -75,7 +77,7 @@ describe 'deploy-user::default' do
   end
 
   context 'with ssh hosts entries' do
-    deploy_known_hosts_path = '/etc/deploy/.ssh/known_hosts'
+    deploy_known_hosts_path = "#{deploy_ssh_dir}/known_hosts"
 
     rsa_key = {
       key_type: 'rsa',
@@ -113,6 +115,25 @@ describe 'deploy-user::default' do
         key_type: dsa_key[:key_type],
         key: dsa_key[:key]
       )
+    end
+  end
+  context 'with private keys as node attributes' do
+    private_key = {
+      filename: 'foo_rsa',
+      content: 'some content here'
+    }
+
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new do |node|
+        node.set['deploy_user']['private_keys'] = [
+          private_key
+        ]
+      end
+      runner.converge(described_recipe)
+    end
+
+    it 'should create the private ssh key' do
+      expect(chef_run).to create_file("#{deploy_ssh_dir}/#{private_key[:filename]}")
     end
   end
 end
