@@ -4,7 +4,7 @@ maintainer_email 'bhanlon@sessiondigital.com, wdolce@sessiondigital.com'
 license 'all_rights'
 description 'Installs/Configures deploy-user'
 long_description 'Installs/Configures deploy-user'
-version '0.9.0'
+version '0.9.1'
 
 depends 'ssh_known_hosts', '~> 0.1'
 depends 'sudo'
