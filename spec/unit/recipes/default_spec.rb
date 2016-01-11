@@ -75,19 +75,25 @@ describe 'deploy-user::default' do
   end
 
   context 'with ssh hosts entries' do
+    deploy_known_hosts_path = '/etc/deploy/.ssh/known_hosts'
+
+    rsa_key = {
+      key_type: 'rsa',
+      host: 'example.com',
+      key: 'a key that is not real'
+    }
+
+    dsa_key = {
+      key_type: 'dsa',
+      host: 'example.net',
+      key: 'another key that is not real'
+    }
+
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new do |node|
         node.set['deploy_user']['ssh_known_hosts_entries'] = [
-          {
-            key_type: 'rsa',
-            host: 'example.com',
-            key: 'a key that is not real'
-          },
-          {
-            key_type: 'dsa',
-            host: 'example.net',
-            key: 'another key that is not real'
-          }
+          rsa_key,
+          dsa_key
         ]
       end
       runner.converge(described_recipe)
@@ -95,17 +101,17 @@ describe 'deploy-user::default' do
 
     it 'should create a ssh known hosts entry' do
       expect(chef_run).to create_ssh_known_hosts_entry('example.com').with(
-        path: '/etc/deploy/.ssh/known_hosts',
-        key_type: 'rsa',
-        key: 'a key that is not real'
+        path: deploy_known_hosts_path,
+        key_type: rsa_key[:key_type],
+        key: rsa_key[:key]
       )
     end
 
     it 'should create a second ssh known hosts entry' do
       expect(chef_run).to create_ssh_known_hosts_entry('example.net').with(
-        path: '/etc/deploy/.ssh/known_hosts',
-        key_type: 'dsa',
-        key: 'another key that is not real'
+        path: deploy_known_hosts_path,
+        key_type: dsa_key[:key_type],
+        key: dsa_key[:key]
       )
     end
   end
