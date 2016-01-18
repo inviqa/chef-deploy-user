@@ -78,5 +78,6 @@ Chef::Log.debug 'Allow the deploy user to have sudo.'
 sudo 'deploy_permissions' do
   user node['deploy_user']['user']
   defaults ['!requiretty']
+  commands node['deploy_user']['commands'] if node['deploy_user']['commands']
   nopasswd true
 end
