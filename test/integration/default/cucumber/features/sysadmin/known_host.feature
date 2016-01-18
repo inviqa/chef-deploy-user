@@ -11,5 +11,10 @@ Scenario: github is added to user known hosts
 
 Scenario: deploy user has sudo
   Given the deploy user is "deploy"
-  When I run sudo
+  When I run sudo with an authorised command
   Then the incident is not reported
+
+Scenario: deploy user has sudo limited to certain commands
+  Given the deploy user is "deploy"
+  When I run sudo with an unauthorised command
+  Then the command fails

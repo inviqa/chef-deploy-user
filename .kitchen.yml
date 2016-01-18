@@ -24,6 +24,9 @@ suites:
       - recipe[deploy-user::default]
     attributes:
       deploy_user:
+        commands:
+          -
+            '/bin/mkdir'
         data_bag: 'deploy_user'
         ssh_known_hosts_entries:
           -
