@@ -35,5 +35,5 @@ Then(/^the incident is not reported$/) do
 end
 
 Then(/^the command fails$/) do
-  expect(@useradd).to match('sudo: a password is required')
+  expect(@useradd).to match(/sudo.*password.*required.*/)
 end
