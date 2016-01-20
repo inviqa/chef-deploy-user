@@ -27,6 +27,10 @@ suites:
         commands:
           -
             '/bin/mkdir'
+        allowed_deployers:
+          -
+            user: deployer
+
         data_bag: 'deploy_user'
         ssh_known_hosts_entries:
           -

@@ -44,7 +44,7 @@ describe file('/etc/deploy/.ssh/known_hosts') do
   its(:content) { should match entry }
 end
 
-describe file('/etc/sudoers.d/deploy_permissions') do
+describe file('/etc/sudoers.d/deploy') do
   it { should be_file }
   its(:content) { should match(/deploy ALL=\(ALL\)/) }
 end

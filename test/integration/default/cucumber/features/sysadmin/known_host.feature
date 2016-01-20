@@ -18,3 +18,9 @@ Scenario: deploy user has sudo limited to certain commands
   Given the deploy user is "deploy"
   When I run sudo with an unauthorised command
   Then the command fails
+
+Scenario: an unprivileged user may run commands as deploy
+  Given the deploy user is "deploy"
+  And the test user is "deployer"
+  When I run sudo as "deployer" to "deploy"
+  Then the command succeeds

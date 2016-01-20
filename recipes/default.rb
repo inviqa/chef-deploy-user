@@ -27,6 +27,16 @@ user node['deploy_user']['user'] do
   action :lock
 end
 
+directory node['deploy_user']['home'] do
+  owner node['deploy_user']['user']
+  group node['deploy_user']['gid']
+  action :create
+  only_if {
+    node['deploy_user']['home']
+  }
+end
+
+
 Chef::Log.debug 'Create the deploy user SSH directory.'
 directory ssh_dir_path do
   owner node['deploy_user']['user']
@@ -75,9 +85,20 @@ node['deploy_user']['ssh_known_hosts_entries'].each do |known_host_entry|
 end
 
 Chef::Log.debug 'Allow the deploy user to have sudo.'
-sudo 'deploy_permissions' do
+sudo node['deploy_user']['user'] do
   user node['deploy_user']['user']
   defaults ['!requiretty']
   commands node['deploy_user']['commands'] if node['deploy_user']['commands']
   nopasswd true
 end
+
+Chef::Log.debug 'Allow the following groups to have access to the deploy user'
+node['deploy_user']['allowed_deployers'].each do |deployer|
+  sudo 'deployers' do
+    user      deployer['user'] if deployer['user']
+    group     deployer['group'] if deployer['group']
+    defaults  ['!requiretty']
+    runas     node['deploy_user']['user']
+    nopasswd  true
+  end
+end if node['deploy_user']['allowed_deployers']

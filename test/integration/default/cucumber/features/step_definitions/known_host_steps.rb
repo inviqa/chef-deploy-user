@@ -37,3 +37,20 @@ end
 Then(/^the command fails$/) do
   expect(@useradd).to match(/sudo.*password.*required.*/)
 end
+
+Given(/^the test user is "([^"]*)"$/) do |test_user|
+  output = `user_exists=$(id -u #{test_user} > /dev/null 2>&1; echo $?)`
+  useradd = `sudo -b -n userdd #{test_user}  2>&1 &`
+end
+
+When(/^I run sudo as "([^"]*)" to "([^"]*)"$/) do |deployer, deploy_user|
+  @test_dir = '/etc/foo'
+  cmd = "sudo -b -n /bin/mkdir -p #{@test_dir}"
+  @sudo_command = `sudo -b -n su #{deployer} && sudo -b -n -u #{deploy_user} bash -c '#{cmd}' 2>&1 &`
+end
+
+Then(/^the command succeeds$/) do
+  expect(@sudo_command).not_to match(/sudo.*password.*required.*/)
+  dir = ::File.directory?(@test_dir)
+  expect(dir).to be_truthy
+end
