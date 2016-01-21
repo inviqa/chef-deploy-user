@@ -77,10 +77,10 @@ end
 
 Chef::Log.debug 'Add the known_host entries.'
 node['deploy_user']['ssh_known_hosts_entries'].each do |known_host_entry|
-  ssh_known_hosts_entry known_host_entry[:host] do
+  ssh_known_hosts_entry known_host_entry['host'] do
     path ssh_known_hosts_path
-    key_type known_host_entry[:key_type]
-    key known_host_entry[:key]
+    key_type known_host_entry['key_type']
+    key known_host_entry['key']
   end
 end
 
@@ -94,7 +94,8 @@ end
 
 Chef::Log.debug 'Allow the following groups to have access to the deploy user'
 node['deploy_user']['allowed_deployers'].each do |deployer|
-  sudo 'deployers' do
+  sudo_file = deployer['name'] || deployer['user'] || deployer['group']
+  sudo sudo_file do
     user      deployer['user'] if deployer['user']
     group     deployer['group'] if deployer['group']
     defaults  ['!requiretty']
