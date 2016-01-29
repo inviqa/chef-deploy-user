@@ -8,19 +8,3 @@ Scenario: github is added to user known hosts
   And git is installed on the server
   When I checkout my private repository
   Then I am not asked to verify the host
-
-Scenario: deploy user has sudo
-  Given the deploy user is "deploy"
-  When I run sudo with an authorised command
-  Then the incident is not reported
-
-Scenario: deploy user has sudo limited to certain commands
-  Given the deploy user is "deploy"
-  When I run sudo with an unauthorised command
-  Then the command fails
-
-Scenario: an unprivileged user may run commands as deploy
-  Given the deploy user is "deploy"
-  And the test user is "deployer"
-  When I run sudo as "deployer" to "deploy"
-  Then the command succeeds

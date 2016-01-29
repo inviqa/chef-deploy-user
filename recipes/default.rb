@@ -5,6 +5,30 @@
 #
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 
+def group_identifier_is_numeric(identifier)
+  (/^\d+$/).match(identifier.to_s)
+end
+
+def normalize_group_identifer(identifier)
+  return nil if identifier.nil?
+  identifier = '#' + identifier.to_s if group_identifier_is_numeric(identifier)
+  identifier
+end
+
+def sudo_file_name(deployer)
+  # if the name has been specifically chosen return this
+  return deployer['filename'] if deployer['filename']
+  if deployer['user']
+    sudo_filename = deployer['user'].to_s
+  elsif deployer['group']
+    sudo_filename = deployer['group'].to_s
+    if group_identifier_is_numeric(deployer['group'])
+      sudo_filename = 'zzz_' + sudo_filename
+    end
+  end
+  sudo_filename
+end
+
 ssh_dir_path          = "#{node['deploy_user']['home']}/.ssh"
 ssh_known_hosts_path  = "#{ssh_dir_path}/known_hosts"
 
@@ -31,11 +55,10 @@ directory node['deploy_user']['home'] do
   owner node['deploy_user']['user']
   group node['deploy_user']['gid']
   action :create
-  only_if {
+  only_if do
     node['deploy_user']['home']
-  }
+  end
 end
-
 
 Chef::Log.debug 'Create the deploy user SSH directory.'
 directory ssh_dir_path do
@@ -94,12 +117,13 @@ end
 
 Chef::Log.debug 'Allow the following groups to have access to the deploy user'
 node['deploy_user']['allowed_deployers'].each do |deployer|
-  sudo_file = deployer['name'] || deployer['user'] || deployer['group']
-  sudo sudo_file do
-    user      deployer['user'] if deployer['user']
-    group     deployer['group'] if deployer['group']
-    defaults  ['!requiretty']
-    runas     node['deploy_user']['user']
-    nopasswd  true
+  deployer_group = normalize_group_identifer(deployer['group'])
+
+  sudo sudo_file_name(deployer) do
+    user deployer['user'] if deployer['user']
+    group deployer_group if deployer_group
+    defaults ['!requiretty']
+    runas node['deploy_user']['user']
+    nopasswd true
   end
 end if node['deploy_user']['allowed_deployers']
