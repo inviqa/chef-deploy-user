@@ -48,3 +48,8 @@ describe file('/etc/sudoers.d/deploy') do
   it { should be_file }
   its(:content) { should match(/deploy ALL=\(ALL\)/) }
 end
+
+describe file('/etc/sudoers.d/zzz_7001') do
+  it { should be_file }
+  its(:content) { should match(/%#7001/) }
+end

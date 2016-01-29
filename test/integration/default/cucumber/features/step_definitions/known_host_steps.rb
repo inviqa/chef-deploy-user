@@ -40,13 +40,25 @@ end
 
 Given(/^the test user is "([^"]*)"$/) do |test_user|
   output = `user_exists=$(id -u #{test_user} > /dev/null 2>&1; echo $?)`
-  useradd = `sudo -b -n userdd #{test_user}  2>&1 &`
+  useradd = `sudo -b -n useradd #{test_user}  2>&1 &`
 end
 
-When(/^I run sudo as "([^"]*)" to "([^"]*)"$/) do |deployer, deploy_user|
+When(/^I run sudo as "([^"]*)" to "([^"]*)"$/) do | deployer, deploy_user|
   @test_dir = '/etc/foo'
   cmd = "sudo -b -n /bin/mkdir -p #{@test_dir}"
   @sudo_command = `sudo -b -n su #{deployer} && sudo -b -n -u #{deploy_user} bash -c '#{cmd}' 2>&1 &`
+end
+
+Given(/^the test user is "([^"]*)" in the "([^"]*)" group$/) do | deploy_user, deployer_group|
+  #output = `user_exists=$(id -u #{deploy_user} > /dev/null 2>&1; echo $?)`
+  #groupexists = `group_exists=$(id -g #{deployer_group} > /dev/null 2>&1; echo $?)`
+  groupadd = `sudo -b -n groupadd #{deployer_group} 2>&1 &`
+  useradd = `sudo -b -n useradd #{deploy_user}  2>&1 &`
+  groupmod = `usermod -a -G #{deployer_group} #{deploy_user} 2>&1 &`
+end
+
+Given(/^the "([^"]*)" group has gid of "([^"]*)"$/) do |deployer_group, gid|
+  `groupmod -g #{gid} #{deployer_group} 2>&1 &`
 end
 
 Then(/^the command succeeds$/) do

@@ -30,6 +30,11 @@ suites:
         allowed_deployers:
           -
             user: deployer
+          -
+            group: deployers
+
+          -
+            group: 7001
 
         data_bag: 'deploy_user'
         ssh_known_hosts_entries:

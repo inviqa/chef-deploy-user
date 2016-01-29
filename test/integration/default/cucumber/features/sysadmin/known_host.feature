@@ -21,6 +21,19 @@ Scenario: deploy user has sudo limited to certain commands
 
 Scenario: an unprivileged user may run commands as deploy
   Given the deploy user is "deploy"
-  And the test user is "deployer"
-  When I run sudo as "deployer" to "deploy"
+  And the test user is "deployer1"
+  When I run sudo as "deployer1" to "deploy"
   Then the command succeeds
+
+Scenario: an unprivileged user in an authorised group may run commands as deploy
+  Given the deploy user is "deploy"
+  And the test user is "deployer2" in the "deployer" group
+  When I run sudo as "deployer2" to "deploy"
+  Then the command succeeds
+
+  Scenario: an unprivileged user in an authorised group specified by gid may run commands as deploy
+    Given the deploy user is "deploy"
+    And the test user is "deployer3" in the "deployer2" group
+    And the "deployer2" group has gid of "7001"
+    When I run sudo as "deployer2" to "deploy"
+    Then the command succeeds
