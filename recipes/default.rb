@@ -6,7 +6,7 @@
 # Copyright (c) 2015 The Authors, All Rights Reserved.
 
 def group_identifier_is_numeric(identifier)
-  return (/\d+/).match(identifier.to_s)
+  return (/^\d+$/).match(identifier.to_s)
 end
 
 def normalize_group_identifer(identifier)
