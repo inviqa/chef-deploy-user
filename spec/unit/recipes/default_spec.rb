@@ -38,7 +38,7 @@ describe 'deploy-user::default' do
     end
 
     it 'creates deploy_permissions with sudo' do
-      expect(chef_run).to install_sudo('deploy_permissions').with(
+      expect(chef_run).to install_sudo('deploy').with(
         user: 'deploy',
         defaults: ['!requiretty'],
         nopasswd: true
