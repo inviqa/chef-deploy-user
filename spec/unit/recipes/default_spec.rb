@@ -66,12 +66,12 @@ describe 'deploy-user::default' do
   end
 
   context 'without a shell specified' do
+    before do
+      stub_command('passwd -S deploy').and_return(252)
+    end
     let(:chef_run) do
       runner = ChefSpec::ServerRunner.new do |node|
         node.set['deploy_user']['shell'] = false
-      end
-      before do
-        stub_command('passwd -S deploy').and_return(252)
       end
       runner.converge(described_recipe)
     end
