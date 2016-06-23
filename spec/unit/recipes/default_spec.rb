@@ -25,7 +25,8 @@ describe 'deploy-user::default' do
     end
 
     it 'should create the deploy user' do
-      expect(chef_run).to create_user('deploy').with(
+      expect(chef_run).to create_user('Create deploy user').with(
+        username: 'deploy',
         gid: 3000,
         home: deploy_home_dir,
         shell: '/sbin/nologin',
@@ -34,7 +35,9 @@ describe 'deploy-user::default' do
     end
 
     it 'locks a user with an explicit action' do
-      expect(chef_run).to lock_user('deploy')
+      expect(chef_run).to lock_user('Lock deploy user').with(
+        username: 'deploy'
+      )
     end
 
     it 'creates deploy_permissions with sudo' do
