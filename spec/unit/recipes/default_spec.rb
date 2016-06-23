@@ -87,7 +87,9 @@ describe 'deploy-user::default' do
 
   context 'with ssh hosts entries' do
     deploy_known_hosts_path = "#{deploy_ssh_dir}/known_hosts"
-
+    before do
+      stub_command('passwd -S deploy').and_return(252)
+    end
     rsa_key = {
       key_type: 'rsa',
       host: 'example.com',
@@ -127,6 +129,10 @@ describe 'deploy-user::default' do
     end
   end
   context 'with private keys as node attributes' do
+    before do
+      stub_command('passwd -S deploy').and_return(0)
+    end
+
     private_key = {
       filename: 'foo_rsa',
       content: 'some content here'
