@@ -38,7 +38,8 @@ group node['deploy_user']['group'] do
 end
 
 Chef::Log.debug 'Create the deploy user.'
-user node['deploy_user']['user'] do
+user 'Create deploy user' do
+  username node['deploy_user']['user']
   gid node['deploy_user']['gid']
   shell node['deploy_user']['shell'] if node['deploy_user']['shell']
   home node['deploy_user']['home'] if node['deploy_user']['home']
@@ -47,7 +48,8 @@ user node['deploy_user']['user'] do
 end
 
 Chef::Log.debug 'Lock the user so it cannot be directly logged into.'
-user node['deploy_user']['user'] do
+user 'Lock deploy user' do
+  username node['deploy_user']['user']
   action :lock
 end
 
