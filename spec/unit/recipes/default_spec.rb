@@ -17,7 +17,7 @@ describe 'deploy-user::default' do
     end
 
     before do
-      stub_command("passwd -S deploy").and_return(0)
+      stub_command('passwd -S deploy').and_return(0)
     end
     it 'converges successfully' do
       expect { chef_run }.to_not raise_error
@@ -71,7 +71,7 @@ describe 'deploy-user::default' do
         node.set['deploy_user']['shell'] = false
       end
       before do
-        stub_command("passwd -S deploy").and_return(252)
+        stub_command('passwd -S deploy').and_return(252)
       end
       runner.converge(described_recipe)
     end
