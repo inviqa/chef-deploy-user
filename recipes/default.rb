@@ -51,6 +51,7 @@ Chef::Log.debug 'Lock the user so it cannot be directly logged into.'
 user 'Lock deploy user' do
   username node['deploy_user']['user']
   action :lock
+  only_if "passwd -S #{node['deploy_user']['user']}"
 end
 
 directory node['deploy_user']['home'] do
