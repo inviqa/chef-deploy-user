@@ -128,6 +128,7 @@ describe 'deploy-user::default' do
       )
     end
   end
+
   context 'with private keys as node attributes' do
     before do
       stub_command('passwd -S deploy').and_return(0)
@@ -150,6 +151,28 @@ describe 'deploy-user::default' do
     it 'should create the private ssh key' do
       key_path = "#{deploy_ssh_dir}/#{private_key[:filename]}"
       expect(chef_run).to create_file(key_path)
+    end
+  end
+
+  context 'without sudo for the deploy user' do
+    before do
+      stub_command('passwd -S deploy').and_return(0)
+    end
+
+    private_key = {
+      filename: 'foo_rsa',
+      content: 'some content here'
+    }
+
+    let(:chef_run) do
+      runner = ChefSpec::ServerRunner.new do |node|
+        node.set['deploy_user']['use_sudo'] = false
+      end
+      runner.converge(described_recipe)
+    end
+
+    it 'should not let the deploy user sudo' do
+      expect(chef_run).to_not install_sudo('deploy')
     end
   end
 end

@@ -6,3 +6,5 @@ default['deploy_user']['home']        = '/etc/deploy'
 default['deploy_user']['manage_home'] = true
 
 default['deploy_user']['ssh_known_hosts_entries'] = []
+
+default['deploy_user']['use_sudo']    = true
