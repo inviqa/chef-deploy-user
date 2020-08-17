@@ -116,6 +116,7 @@ sudo node['deploy_user']['user'] do
   defaults ['!requiretty']
   commands node['deploy_user']['commands'] if node['deploy_user']['commands']
   nopasswd true
+  only_if { node['deploy_user']['use_sudo'] }
 end
 
 Chef::Log.debug 'Allow the following groups to have access to the deploy user'
