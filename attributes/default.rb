@@ -4,5 +4,7 @@ default['deploy_user']['user']        = 'deploy'
 default['deploy_user']['shell']       = '/sbin/nologin'
 default['deploy_user']['home']        = '/etc/deploy'
 default['deploy_user']['manage_home'] = true
-
 default['deploy_user']['ssh_known_hosts_entries'] = []
+default['ssh_known_hosts']['file']    = '/etc/deploy/.ssh/known_hosts'
+default['ssh_known_hosts']['key_type']    = 'rsa,dsa'
+default['authorization']['sudo']['include_sudoers_d'] = false

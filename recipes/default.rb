@@ -104,9 +104,7 @@ end
 Chef::Log.debug 'Add the known_host entries.'
 node['deploy_user']['ssh_known_hosts_entries'].each do |known_host_entry|
   ssh_known_hosts_entry known_host_entry['host'] do
-    path ssh_known_hosts_path
-    key_type known_host_entry['key_type']
-    key known_host_entry['key']
+    key known_host_entry['key'] if known_host_entry['key']
   end
 end
 
